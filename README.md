@@ -96,5 +96,3 @@ python3 -m http.server -d docs
 ```
 
 ---
-
-*Estadística Espacial © 2026*
