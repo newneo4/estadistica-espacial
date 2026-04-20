@@ -52,7 +52,7 @@ mkdir -p tareas/tarea-02-autocorrelacion/{datos,figuras}
   "date": "2026-05-01",
   "tags": ["autocorrelación", "moran", "LISA"],
   "thumbnail": null,
-  "status": "completada",
+  "status": "completada", "en progreso", 
   "report": "analisis.html"
 }
 ```

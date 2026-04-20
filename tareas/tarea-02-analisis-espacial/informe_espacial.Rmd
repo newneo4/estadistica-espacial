@@ -1,0 +1,437 @@
+---
+title: "Informe de Estadística Espacial Pecuaria"
+author: "Análisis Geoespacial"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 10,
+  fig.height = 7,
+  out.width = "100%"
+)
+```
+
+## 1. Introducción y Preparación
+
+Este informe presenta el análisis espacial de la producción pecuaria en el Perú, analizando la productividad por productor, la especialización regional (ej. Charqui) y la variación de producción entre los años 2021 y 2024.
+
+```{r libs, message=FALSE, warning=FALSE}
+############################################################
+# LIBRERÍAS
+############################################################
+library(sf)
+library(arrow)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+library(tidyr)
+library(forcats)
+```
+
+## 2. Carga de Datos y Limpieza Geoespacial
+
+Se utiliza el shapefile provincial del INEI para los límites geográficos y archivos con formato `parquet` procesados vía Apache Arrow para los datos transaccionales, optimizando así el rendimiento.
+
+```{r loader, message=FALSE, warning=FALSE}
+############################################################
+# SHAPEFILE
+############################################################
+mapa <- st_read("C:/Users/noel1/Desktop/ESTADISTICA ESPACIAL/Provincial INEI 2023 geogpsperu SuyoPomalia/Provincial INEI 2023 geogpsperu SuyoPomalia.shp", quiet = TRUE)
+
+mapa <- mapa %>%
+  mutate(DEPARTAMEN = str_trim(DEPARTAMEN))
+
+############################################################
+# DICCIONARIO ESTÁTICO: NOMBREDD sucio → DEPARTAMEN oficial
+############################################################
+dic_dep <- tribble(
+  ~NOMBREDD,                  ~DEPARTAMEN,
+  "AMAZONAS",                 "AMAZONAS",
+  "ANCASH",                   "ANCASH",
+  "APURIMAC",                 "APURIMAC",
+  "AREQUIPA",                 "AREQUIPA",
+  "AYACUCHO",                 "AYACUCHO",
+  "CAJAMARCA",                "CAJAMARCA",
+  "CALLAO",                   "CALLAO",
+  "CUSCO",                    "CUSCO",
+  "HUANCAVELICA",             "HUANCAVELICA",
+  "HUANUCO",                  "HUANUCO",
+  "ICA",                      "ICA",
+  "JUNIN",                    "JUNIN",
+  "LA LIBERTAD",              "LA LIBERTAD",
+  "LAMBAYEQUE",               "LAMBAYEQUE",
+  "LIMA",                     "LIMA",
+  "LORETO",                   "LORETO",
+  "MADRE DE DIOS",            "MADRE DE DIOS",
+  "MOQUEGUA",                 "MOQUEGUA",
+  "PASCO",                    "PASCO",
+  "PIURA",                    "PIURA",
+  "PUNO",                     "PUNO",
+  "SAN MARTIN",               "SAN MARTIN",
+  "TACNA",                    "TACNA",
+  "TUMBES",                   "TUMBES",
+  "UCAYALI",                  "UCAYALI",
+  "AMAZON",                   "AMAZONAS",
+  "AREQUI",                   "AREQUIPA",
+  "AYACUC",                   "AYACUCHO",
+  "CAJAMA",                   "CAJAMARCA",
+  "HUANCA",                   "HUANCAVELICA",
+  "LA LIB",                   "LA LIBERTAD",
+  "LAMBAY",                   "LAMBAYEQUE",
+  "MADRE ",                   "MADRE DE DIOS",
+  "MOQUEG",                   "MOQUEGUA",
+  "SAN MA",                   "SAN MARTIN",
+  "UCAYAL",                   "UCAYALI",
+  "MADRE",                    "MADRE DE DIOS",
+  "APUR\u00cdMAC",            "APURIMAC",   
+  "APUR\u00cd",               "APURIMAC",   
+  "HU\u00c1NUCO",             "HUANUCO",    
+  "HU\u00c1NU",               "HUANUCO",    
+  "JUN\u00cdN",               "JUNIN",      
+  "SAN MART\u00cdN",          "SAN MARTIN", 
+  "HUANCAVELICA",             "HUANCAVELICA",
+  "APUR\u00c3\u008dMAC",      "APURIMAC",
+  "APUR\u00c3\u008d",         "APURIMAC",
+  "HU\u00c3\u0081NUCO",       "HUANUCO",
+  "HU\u00c3\u0081NU",         "HUANUCO",
+  "JUN\u00c3\u008dN",         "JUNIN",
+  "SAN MART\u00c3\u008dN",    "SAN MARTIN",
+  "HUANC\u00c3AVELICA",       "HUANCAVELICA",
+  "HUANCA\u00c3VELICA",       "HUANCAVELICA"
+)
+
+############################################################
+# PARQUET Y ETL
+############################################################
+files <- list.files(
+  "C:/Users/noel1/Desktop/ESTADISTICA ESPACIAL/",
+  pattern = "data_part_.*\\.parquet$",
+  full.names = TRUE
+)
+
+ds <- open_dataset(files) %>%
+  rename(ANIO = `ï»¿ANIO`)
+
+vars_p420 <- names(ds)[grepl("^P420", names(ds))]
+vars_p419 <- names(ds)[grepl("^P419", names(ds))]
+
+ds_sel <- ds %>%
+  select(
+    ANIO, CCDD, NOMBREDD,
+    LONGITUD, LATITUD,
+    FACTOR, RESFIN,
+    all_of(vars_p419),
+    all_of(vars_p420)
+  )
+
+# RECUPERACIÓN ESPACIAL FALLBACK (TryCatch)
+fix_geo_raw <- tryCatch({
+  ds_sel %>%
+    mutate(
+      NOMBREDD = as.character(NOMBREDD),
+      LONGITUD = as.character(LONGITUD),
+      LATITUD  = as.character(LATITUD)
+    ) %>%
+    mutate(NOMBREDD_trim = str_trim(NOMBREDD)) %>%
+    filter(is.na(NOMBREDD_trim) | NOMBREDD_trim %in% c("", " ")) %>%
+    select(CCDD, LONGITUD, LATITUD) %>%
+    distinct() %>%
+    collect() %>%
+    mutate(
+      LONGITUD = suppressWarnings(as.numeric(str_trim(LONGITUD))),
+      LATITUD  = suppressWarnings(as.numeric(str_trim(LATITUD)))
+    ) %>%
+    filter(!is.na(LONGITUD), !is.na(LATITUD))
+}, error = function(e) {
+  tibble(CCDD = character(), LONGITUD = numeric(), LATITUD = numeric())
+})
+
+if (is.data.frame(fix_geo_raw) && nrow(fix_geo_raw) > 0) {
+  fix_geo_sf <- st_as_sf(
+    fix_geo_raw, coords = c("LONGITUD", "LATITUD"),
+    crs = st_crs(mapa)
+  )
+  fix_geo <- st_join(fix_geo_sf, mapa %>% select(DEPARTAMEN), left = TRUE) %>%
+    st_drop_geometry() %>%
+    select(CCDD, DEPARTAMEN) %>%
+    distinct() %>% filter(!is.na(DEPARTAMEN))
+} else {
+  fix_geo <- tibble(CCDD = character(), DEPARTAMEN = character())
+}
+
+limpiar_dep <- function(df) {
+  df %>%
+    mutate(NOMBREDD = str_trim(NOMBREDD)) %>%
+    left_join(dic_dep, by = "NOMBREDD") %>%
+    { if ("CCDD" %in% names(.))
+      left_join(., fix_geo, by = "CCDD") %>%
+        mutate(DEPARTAMEN = coalesce(DEPARTAMEN.x, DEPARTAMEN.y)) %>%
+        select(-any_of(c("DEPARTAMEN.x", "DEPARTAMEN.y")))
+      else . } %>%
+    mutate(DEPARTAMEN = if_else(
+      is.na(DEPARTAMEN) | DEPARTAMEN == "",
+      if_else(NOMBREDD == "", NA_character_, NOMBREDD),
+      DEPARTAMEN
+    ))
+}
+
+ds_clean <- ds_sel %>%
+  mutate(
+    RESFIN = str_trim(RESFIN),
+    RESFIN = if_else(RESFIN == "", NA, RESFIN),
+    RESFIN = cast(RESFIN, int32())
+  ) %>%
+  filter(RESFIN == 1) %>%
+  mutate(
+    NOMBREDD = str_trim(NOMBREDD),
+    P419_NOM = str_trim(P419_NOM),
+    P419_NOM = if_else(P419_NOM == "", NA, P419_NOM),
+    P419_NOM = toupper(P419_NOM),
+    P420_EQUIV = str_trim(P420_EQUIV),
+    P420_EQUIV = if_else(P420_EQUIV == "", NA, P420_EQUIV),
+    P420_CANT_ENT = str_trim(P420_CANT_ENT),
+    P420_CANT_ENT = if_else(P420_CANT_ENT == "", NA, P420_CANT_ENT),
+    P420_CANT_DEC = str_trim(P420_CANT_DEC),
+    P420_CANT_DEC = if_else(P420_CANT_DEC == "", NA, P420_CANT_DEC),
+    FACTOR = str_trim(FACTOR),
+    FACTOR = if_else(FACTOR == "", NA, FACTOR)
+  ) %>%
+  filter(!is.na(P419_NOM)) %>%
+  mutate(
+    P420_EQUIV = if_else(
+      str_starts(P420_EQUIV, "\\."),
+      paste0("0", P420_EQUIV),
+      P420_EQUIV
+    )
+  ) %>%
+  mutate(
+    P420_EQUIV = cast(P420_EQUIV, float64()),
+    P420_CANT_ENT = cast(P420_CANT_ENT, float64()),
+    P420_CANT_DEC = cast(P420_CANT_DEC, float64()),
+    FACTOR = cast(FACTOR, float64())
+  )
+
+ds_trans <- ds_clean %>%
+  mutate(
+    cantidad = coalesce(P420_CANT_ENT, 0) + coalesce(P420_CANT_DEC, 0) / 100,
+    kg = cantidad * coalesce(P420_EQUIV, 1),
+    FACTOR = coalesce(FACTOR, 1),
+    kg_pond = kg * FACTOR
+  )
+```
+
+## 3. Insight 1: Productividad Global
+
+Análisis del rendimiento (volumen de extracción en kilogramos de derivados pecuarios) por unidad de producción encuestada en cada departamento.
+
+```{r insight1_calc, include=FALSE}
+data_productividad <- ds_trans %>%
+  group_by(NOMBREDD) %>%
+  summarise(
+    total_kg_pond = sum(kg_pond, na.rm = TRUE),
+    productores = n(),
+    kg_por_productor = total_kg_pond / productores
+  ) %>%
+  collect() %>%
+  mutate(NOMBREDD = str_trim(NOMBREDD))
+
+mapa_productividad <- mapa %>%
+  left_join(data_productividad %>% limpiar_dep(), by = c("DEPARTAMEN"))
+```
+
+### Mapa Coroplético
+
+```{r mapa1, out.width="100%", fig.align='center'}
+ggplot(mapa_productividad) +
+  geom_sf(aes(fill = kg_por_productor)) +
+  scale_fill_viridis_c(option = "mako", na.value = "grey90", direction = -1) +
+  theme_minimal() +
+  labs(
+    title = "Productividad Regional",
+    subtitle = "Volumen de producción promedio (Kg) por agricultor / unidad pecuaria",
+    fill = "Kg / Productor"
+  ) +
+  theme(legend.position = "right")
+```
+
+### Gráfico de Ranking
+
+A continuación, los territorios ordenados según su eficacia productiva per cápita:
+
+```{r bar1, out.width="100%", fig.align='center'}
+data_productividad %>%
+  limpiar_dep() %>%
+  filter(!is.na(DEPARTAMEN)) %>%
+  mutate(DEP = fct_reorder(DEPARTAMEN, kg_por_productor)) %>%
+  ggplot(aes(x = kg_por_productor, y = DEP, fill = kg_por_productor)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_viridis_c(option = "mako", direction = -1) +
+  scale_x_continuous(labels = scales::comma) +
+  theme_minimal(base_size = 11) +
+  labs(
+    title    = "Ranking de Productividad Departamental",
+    subtitle = "Kg totales ponderados sobre unidades productivas encuestadas",
+    x        = "Kg / Productor",
+    y        = ""
+  )
+```
+
+## 4. Insight 2: Clúster de "CHARQUI"
+
+El Charqui es un derivado cárnico altamente identitario. Analizaremos su nivel de concentración en el territorio nacional.
+
+```{r insight2_calc, include=FALSE}
+data_especializacion <- ds_trans %>%
+  filter(P419_NOM == "CHARQUI") %>%
+  group_by(NOMBREDD) %>%
+  summarise(kg_especifico = sum(kg_pond, na.rm = TRUE)) %>%
+  collect() %>%
+  mutate(NOMBREDD = str_trim(NOMBREDD))
+
+mapa_especializacion <- mapa %>%
+  left_join(data_especializacion %>% limpiar_dep(), by = c("DEPARTAMEN"))
+```
+
+### Mapa de Especialización
+
+```{r mapa2, out.width="100%", fig.align='center'}
+ggplot(mapa_especializacion) +
+  geom_sf(aes(fill = kg_especifico)) +
+  scale_fill_viridis_c(option = "magma", na.value = "grey90") +
+  theme_minimal() +
+  labs(
+    title = "Corredor y Concentración del Charqui",
+    subtitle = "Acumulado de producción (Kg ponderados)",
+    fill = "Volumen (Kg)"
+  )
+```
+
+### Volúmenes de Producción
+
+Los departamentos líderes en procesamiento de charqui:
+
+```{r bar2, out.width="100%", fig.align='center'}
+data_especializacion %>%
+  limpiar_dep() %>%
+  filter(!is.na(DEPARTAMEN), !is.na(kg_especifico)) %>%
+  mutate(DEP = fct_reorder(DEPARTAMEN, kg_especifico)) %>%
+  ggplot(aes(x = kg_especifico, y = DEP, fill = kg_especifico)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_viridis_c(option = "magma") +
+  scale_x_continuous(labels = scales::comma) +
+  theme_minimal(base_size = 11) +
+  labs(
+    title    = "Producción del Charqui por Departamento",
+    subtitle = "Kg ponderados a nivel regional",
+    x        = "Kg Ponderados (Total)",
+    y        = ""
+  )
+```
+
+## 5. Insight 3: Dinámica y Evolución (2021 vs 2024)
+
+¿En qué departamentos se experimentó contracción de la producción total general y en cuáles un crecimiento en el salto interanual analizado?
+
+```{r insight3_calc, include=FALSE}
+data_temporal <- ds_trans %>%
+  filter(ANIO %in% c(2021, 2024)) %>%
+  group_by(NOMBREDD, ANIO) %>%
+  summarise(total_kg = sum(kg_pond, na.rm = TRUE), .groups = "drop") %>%
+  collect() %>%
+  mutate(NOMBREDD = str_trim(NOMBREDD)) %>%
+  pivot_wider(names_from = ANIO, values_from = total_kg, names_prefix = "yr_") %>%
+  mutate(
+    variacion_pct = if_else(is.na(yr_2021) | yr_2021 == 0, NA_real_, 
+                            ((yr_2024 - yr_2021) / yr_2021) * 100)
+  )
+
+mapa_temporal <- mapa %>%
+  left_join(data_temporal %>% limpiar_dep(), by = c("DEPARTAMEN"))
+```
+
+### Crecimiento y Contracción Geográfica
+
+```{r mapa3, out.width="100%", fig.align='center'}
+ggplot(mapa_temporal) +
+  geom_sf(aes(fill = variacion_pct)) +
+  scale_fill_gradient2(
+    low = "#d73027", mid = "#ffffbf", high = "#1a9850",
+    midpoint = 0, na.value = "grey90",
+    limits = c(-100, 100), oob = scales::squish
+  ) +
+  theme_minimal() +
+  labs(
+    title = "Evolución Macro: Producción 2021 → 2024",
+    subtitle = "Variación porcentual estandarizada (Recorte a -100%/100%)",
+    fill = "% Var"
+  )
+```
+
+### Desglose de Variación
+
+```{r bar3, out.width="100%", fig.align='center'}
+data_temporal %>%
+  limpiar_dep() %>%
+  filter(!is.na(DEPARTAMEN), !is.na(variacion_pct)) %>%
+  mutate(
+    DEP       = fct_reorder(DEPARTAMEN, variacion_pct),
+    direccion = if_else(variacion_pct >= 0, "Crecimiento", "Contracción")
+  ) %>%
+  ggplot(aes(x = variacion_pct, y = DEP, fill = direccion)) +
+  geom_col() +
+  geom_vline(xintercept = 0, linewidth = 0.5, colour = "grey40") +
+  scale_fill_manual(values = c("Crecimiento" = "#1a9850", "Contracción" = "#d73027")) +
+  scale_x_continuous(labels = scales::percent_format(scale = 1)) +
+  theme_minimal(base_size = 11) +
+  labs(
+    title    = "Crecimiento Interanual (2021 vs 2024)",
+    subtitle = "Contracción (rojo) o Expansión (verde) en el volumen pecuario global",
+    x        = "% de Cambio Ponderado",
+    y        = "",
+    fill     = ""
+  ) +
+  theme(legend.position = "bottom")
+```
+
+## 6. Panorama Consolidado de Volúmenes
+
+Finalmente, este es el consolidado del volumen bruto de producción en la historia de los datos analizados, uniendo todos los departamentos.
+
+```{r bar4, out.width="100%", fig.align='center'}
+data_dep <- ds_trans %>%
+  group_by(NOMBREDD) %>%
+  summarise(
+    total_kg_pond = sum(kg_pond, na.rm = TRUE),
+    productores = n()
+  ) %>%
+  collect() %>%
+  mutate(NOMBREDD = str_trim(NOMBREDD))
+
+data_dep %>%
+  limpiar_dep() %>%
+  filter(!is.na(DEPARTAMEN)) %>%
+  mutate(DEP = fct_reorder(DEPARTAMEN, total_kg_pond)) %>%
+  ggplot(aes(x = total_kg_pond, y = DEP, fill = total_kg_pond)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_viridis_c(option = "plasma") +
+  scale_x_continuous(labels = scales::comma) +
+  theme_minimal(base_size = 11) +
+  labs(
+    title    = "Histórico: Volumen Bruto Total Promedio",
+    subtitle = "Producción histórica ponderada reportada en encuestas",
+    x        = "Kg Ponderados",
+    y        = ""
+  )
+```
+
+---
