@@ -7,8 +7,19 @@
   "date": "2026-04-20",
   "tags": ["introducción", "sf", "visualización"],
   "thumbnail": "figuras/mapa.jpg",
+  "status": "completada",
+  "report": "presentacion.html"
+}
+,{
+  "id": "tarea-02",
+  "folder": "tarea-02-analisis-espacial",
+  "title": "Analisis Estadistico Espacial",
+  "description": "Tratamiento y analisis de data proviniente del ENA 2024.",
+  "date": "2026-04-20",
+  "tags": ["introducción", "sf", "analisis", "etl"],
+  "thumbnail": "figuras/image.png",
   "status": "en progreso",
-  "report": "analisis.html"
+  "report": "informe_espacial.html"
 }
 
 ]

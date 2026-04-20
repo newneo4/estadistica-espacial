@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación: Estadística Espacial | Noe Ulises Machaca</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #3b82f6;
+            --teal: #14b8a6;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--accent), var(--teal));
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .student-info {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--teal);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .intro-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: -50px;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 10;
+        }
+
+        .main-image {
+            width: 100%;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 40px 0 20px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            bottom: 5px;
+            width: 5px;
+            background: var(--accent);
+            border-radius: 5px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: var(--text-dark);
+        }
+
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .concept-box {
+            background: #f1f5f9;
+            padding: 25px;
+            border-radius: 12px;
+            border-top: 4px solid var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        .concept-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .concept-box h3 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .quote {
+            font-style: italic;
+            background: #e2e8f0;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 6px solid var(--teal);
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .quote::after {
+            content: '"';
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 4rem;
+            color: rgba(0, 0, 0, 0.05);
+            font-family: serif;
+        }
+
+        .tools-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tool-tag {
+            background: var(--primary);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .intro-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="student-info">Tarea 01: Presentación del Portafolio</div>
+            <h1>Estadística Espacial</h1>
+            <p style="color: rgba(255,255,255,0.7); font-size: 1.2rem;">Por: Noe Ulises Machaca Chambilla</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="intro-card">
+
+            <h2>Introducción</h2>
+            <p>Este trabajo constituye la primera entrega de mi portafolio de tareas para el curso de
+                <strong>Estadística Espacial</strong>. A través de este documento, busco presentar los fundamentos y la
+                relevancia de esta disciplina, integrando el análisis geográfico con métodos estadísticos avanzados.
+            </p>
+
+            <div class="quote">
+                "La estadística espacial es el área de la estadística que se ocupa del análisis de datos localizados en
+                el espacio, integrando la dimensión geográfica como una variable fundamental en el proceso de modelado."
+            </div>
+
+            <h2>Conceptos Fundamentales</h2>
+            <div class="concepts-grid">
+                <div class="concept-box">
+                    <h3>Primera Ley de la Geografía</h3>
+                    <p>Propuesta por Waldo Tobler: "Todas las cosas están relacionadas entre sí, pero las cosas cercanas
+                        están más relacionadas que las lejanas".</p>
+                </div>
+                <div class="concept-box">
+                    <h3>Autocorrelación Espacial</h3>
+                    <p>Medida de la similitud entre valores de una variable en función de su proximidad espacial.
+                        Fundamental para entender clústeres y patrones.</p>
+                </div>
+                <div class="concept-box">
+                    <h3>Georreferenciación</h3>
+                    <p>Proceso de asignar coordenadas geográficas a un dato, permitiendo su análisis en un Sistema de
+                        Información Geográfica (SIG).</p>
+                </div>
+            </div>
+
+            <h2>Objetivos del Portafolio</h2>
+            <p>A lo largo de este curso, el portafolio documentará el dominio de las siguientes áreas:</p>
+            <ul>
+                <li><strong>Análisis de Patrones de Puntos:</strong> Identificación de distribuciones aleatorias,
+                    agrupadas o regulares.</li>
+                <li><strong>Geoestadística:</strong> Modelado y predicción de variables continuas mediante Kriging.</li>
+                <li><strong>Estadística de Áreas (Reticulados):</strong> Análisis de datos agregados en polígonos
+                    (clústeres locales y globales).</li>
+            </ul>
+
+            <h2>Herramientas Tecnológicas</h2>
+            <p>Para el desarrollo de estas tareas, utilizaremos el ecosistema de ciencia de datos en R:</p>
+            <div class="tools-list">
+                <span class="tool-tag">R Studio</span>
+                <span class="tool-tag">sf (Simple Features)</span>
+                <span class="tool-tag">ggplot2</span>
+                <span class="tool-tag">spdep</span>
+                <span class="tool-tag">tmap</span>
+                <span class="tool-tag">R Markdown</span>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Universidad Nacional - Facultad de Ingenieria Estadística e Informática</p>
+    </footer>
+
+</body>
+
+</html>
