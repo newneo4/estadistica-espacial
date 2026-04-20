@@ -1,0 +1,55 @@
+---
+title: "Tarea 01 — Introducción a la Estadística Espacial"
+author: ""
+date: "2026-04-20"
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: show
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  fig.width = 8,
+  fig.height = 6
+)
+```
+
+## Introducción
+
+Este es un análisis de ejemplo para la primera tarea del curso de Estadística Espacial.
+
+Reemplaza este contenido con tu análisis real.
+
+## Carga de paquetes
+
+```{r packages}
+# library(sf)
+# library(ggplot2)
+# library(dplyr)
+```
+
+## Datos
+
+```{r data}
+# Carga tus datos aquí
+# datos <- st_read("datos/mi_shapefile.shp")
+```
+
+## Análisis
+
+```{r analysis}
+# Tu análisis aquí
+```
+
+## Conclusiones
+
+- Describe tus hallazgos aquí.

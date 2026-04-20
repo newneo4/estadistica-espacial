@@ -1,0 +1,19 @@
+# Build output
+docs/
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Node (por si acaso)
+node_modules/
