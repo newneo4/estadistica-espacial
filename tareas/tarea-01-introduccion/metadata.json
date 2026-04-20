@@ -5,7 +5,7 @@
   "description": "Exploración de conceptos fundamentales de datos espaciales: tipos de datos geográficos, sistemas de coordenadas, y primeras visualizaciones con paquetes de R como sf y ggplot2.",
   "date": "2026-04-20",
   "tags": ["introducción", "sf", "visualización"],
-  "thumbnail": null,
+  "thumbnail": "mapa.jpg",
   "status": "en progreso",
   "report": "analisis.html"
 }
