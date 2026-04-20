@@ -1,6 +1,5 @@
 # 📊 Estadística Espacial — Portafolio de Tareas
 
-[![Deploy Portfolio](https://github.com/newneo4/estadistica-espacial/actions/workflows/deploy.yml/badge.svg)](https://github.com/newneo4/estadistica-espacial/actions/workflows/deploy.yml)
 
 > Portafolio web del curso de Estadística Espacial. Cada tarea se organiza en su propia carpeta con datos, código R y reportes renderizados.
 
