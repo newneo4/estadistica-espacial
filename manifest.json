@@ -18,8 +18,19 @@
   "date": "2026-04-20",
   "tags": ["introducción", "sf", "analisis", "etl"],
   "thumbnail": "figuras/image.png",
-  "status": "en progreso",
+  "status": "completada",
   "report": "informe_espacial.html"
+}
+,{
+  "id": "tarea-03",
+  "folder": "tarea-03-analisis-vacas",
+  "title": "Dashboard de analisis de vacas",
+  "description": "Tratamiento y analisis de hatos de vacas",
+  "date": "2026-04-21",
+  "tags": ["analisis", "etl", "shiny"],
+  "thumbnail": "figuras/vaca.jpg",
+  "status": "en progreso",
+  "report": "analisis_vacas.html"
 }
 
 ]
