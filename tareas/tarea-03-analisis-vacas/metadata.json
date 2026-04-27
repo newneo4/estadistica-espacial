@@ -2,10 +2,11 @@
   "id": "tarea-03",
   "folder": "tarea-03-analisis-vacas",
   "title": "Dashboard de analisis de vacas",
+  "unidad": "UNIDAD 1", 
   "description": "Tratamiento y analisis de hatos de vacas",
   "date": "2026-04-21",
   "tags": ["analisis", "etl", "shiny"],
   "thumbnail": "figuras/vaca.jpg",
-  "status": "completado",
+  "status": "completada",
   "report": "analisis_vacas.html"
 }

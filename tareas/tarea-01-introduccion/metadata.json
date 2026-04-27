@@ -2,6 +2,7 @@
   "id": "tarea-01",
   "folder": "tarea-01-introduccion",
   "title": "Introducción a la Estadística Espacial",
+  "unidad": "UNIDAD 1", 
   "description": "Exploración de conceptos fundamentales de datos espaciales: tipos de datos geográficos, sistemas de coordenadas, y primeras visualizaciones con paquetes de R como sf y ggplot2.",
   "date": "2026-04-20",
   "tags": ["introducción", "sf", "visualización"],

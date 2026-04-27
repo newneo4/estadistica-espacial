@@ -36,6 +36,11 @@ for dir in "$TASKS_DIR"/*/; do
     cp "$dir"*.html "$dest/"
   fi
 
+  # Copiar archivos PDF
+  if ls "$dir"*.pdf 1>/dev/null 2>&1; then
+    cp "$dir"*.pdf "$dest/"
+  fi
+
   # Copiar figuras/imágenes si existen
   if [ -d "$dir/figuras" ]; then
     cp -r "$dir/figuras" "$dest/"
