@@ -269,9 +269,9 @@
     const unitFiltersDiv = $('#unit-filters');
     if (unitFiltersDiv) {
       unitFiltersDiv.addEventListener('click', (e) => {
-        const btn = e.target.closest('.filter-btn');
+        const btn = e.target.closest('.unit-tab');
         if (!btn) return;
-        unitFiltersDiv.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        unitFiltersDiv.querySelectorAll('.unit-tab').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         activeUnitFilter = btn.dataset.unit;
         renderCards();
