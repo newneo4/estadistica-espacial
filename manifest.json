@@ -29,8 +29,19 @@
   "date": "2026-04-21",
   "tags": ["analisis", "etl", "shiny"],
   "thumbnail": "figuras/vaca.jpg",
-  "status": "en progreso",
+  "status": "completado",
   "report": "analisis_vacas.html"
+}
+,{
+  "id": "tarea-04",
+  "folder": "tarea-04-ejercicios-gauss",
+  "title": "Ejercicios de Variable Aleatoria Gaussiana",
+  "description": "Ejercicios propuestos",
+  "date": "2026-04-27",
+  "tags": ["gauss","estadistica espacial"],
+  "thumbnail": "figuras/gauss.jpg",
+  "status": "completado",
+  "report": "gauss.html"
 }
 
 ]
