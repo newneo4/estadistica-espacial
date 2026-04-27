@@ -1,0 +1,219 @@
+---
+title: "Ejercicios de Variable Aleatoria Gaussiana"
+author: "Noe Ulises Machaca Chambilla"
+date: "`r format(Sys.Date(), '%d de %B, %Y')`"
+output:
+  html_document:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: show
+    df_print: paged
+  pdf_document:
+    toc: true
+subtitle: Análisis Estadístico y Probabilístico
+---
+
+<style>
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  h1, h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+  h3 { color: #2980b9; margin-top: 25px; }
+  .main-container { max-width: 1100px; }
+  code { color: #e74c3c; background-color: #f8f9fa; }
+  .table { margin-top: 20px; }
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, fig.width = 9, fig.height = 5)
+library(ggplot2)
+library(dplyr)
+
+# Función auxiliar para graficar la distribución normal con sombreado
+plot_gaussian <- function(mu, sigma, lower = NULL, upper = NULL, title = "", x_label = "Valor") {
+  x <- seq(mu - 4 * sigma, mu + 4 * sigma, length.out = 500)
+  y <- dnorm(x, mu, sigma)
+  df <- data.frame(x = x, y = y)
+  
+  p <- ggplot(df, aes(x, y)) +
+    geom_line(color = "#2c3e50", size = 1) +
+    labs(title = title, x = x_label, y = "Densidad") +
+    theme_minimal() +
+    theme(plot.title = element_text(face = "bold", size = 14))
+  
+  if (!is.null(lower) && !is.null(upper)) {
+    p <- p + geom_area(data = subset(df, x >= lower & x <= upper), aes(y = y), fill = "#3498db", alpha = 0.5)
+  } else if (!is.null(lower)) {
+    p <- p + geom_area(data = subset(df, x >= lower), aes(y = y), fill = "#e74c3c", alpha = 0.5)
+  } else if (!is.null(upper)) {
+    p <- p + geom_area(data = subset(df, x <= upper), aes(y = y), fill = "#2ecc71", alpha = 0.5)
+  }
+  
+  return(p)
+}
+```
+
+## Introducción
+
+La distribución normal o Gaussiana es fundamental en estadística y ciencia de datos. Se define por su media ($\mu$) y su desviación estándar ($\sigma$), con una función de densidad de probabilidad dada por:
+
+$$f(x | \mu, \sigma) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}$$
+
+En este reporte se resuelven diversos ejercicios aplicados a situaciones del mundo real.
+
+---
+
+## Ejercicio 1: Detección de anomalías en sensores IoT
+
+**Contexto:** Un sensor de temperatura en una planta industrial sigue una distribución normal con $\mu = 70$°C y $\sigma = 5$°C.
+
+### (a) Intervalo de lectura normal
+Se define una lectura normal como aquella que cae dentro de $\pm 3\sigma$.
+
+```{r ej1_a}
+mu_1 <- 70
+sigma_1 <- 5
+limite_inf <- mu_1 - 3 * sigma_1
+limite_sup <- mu_1 + 3 * sigma_1
+```
+El intervalo de lectura normal es **[`r limite_inf`°C, `r limite_sup`°C]**.
+
+### (b) Probabilidad de alerta ($X > 82$°C)
+Calculamos $P(X > 82)$.
+
+```{r ej1_b}
+prob_82 <- pnorm(82, mean = mu_1, sd = sigma_1, lower.tail = FALSE)
+plot_gaussian(mu_1, sigma_1, lower = 82, title = "Probabilidad de Temperatura > 82°C")
+```
+La probabilidad de que la temperatura supere los 82°C es de **`r round(prob_82, 4)`**. Dado que 82 está dentro del rango normal, no se dispararía una alerta inmediata de fuera de rango ($\pm 3\sigma$).
+
+### (c) Porcentaje de anomalías esperado
+Según la regla empírica, el 99.7% de los datos cae dentro de $3\sigma$.
+
+```{r ej1_c}
+porcentaje_anomalo <- (1 - 0.997) * 100
+```
+Se espera un **`r porcentaje_anomalo`%** de anomalías bajo condiciones normales.
+
+---
+
+## Ejercicio 2: Clasificación en modelos de crédito
+
+**Contexto:** Las puntuaciones crediticias siguen una distribución $N(650, 80)$. Un puntaje < 550 se considera alto riesgo.
+
+### (a) Estandarización (Puntuación Z)
+Para $x = 550$:
+$Z = \frac{x - \mu}{\sigma}$
+
+```{r ej2_a}
+mu_2 <- 650
+sigma_2 <- 80
+Z_550 <- (550 - mu_2) / sigma_2
+```
+La puntuación Z para 550 es **`r round(Z_550, 2)`**.
+
+### (b) Proporción de alto riesgo
+Calculamos $P(X < 550)$.
+
+```{r ej2_b}
+prob_alto_riesgo <- pnorm(550, mean = mu_2, sd = sigma_2)
+plot_gaussian(mu_2, sigma_2, upper = 550, title = "Área de Alto Riesgo (Puntaje < 550)")
+```
+La proporción de la cartera en alto riesgo es **`r round(prob_alto_riesgo * 100, 2)`%**.
+
+### (c) Ajuste de umbral para el 5%
+Buscamos el valor $x$ tal que $P(X < x) = 0.05$.
+
+```{r ej2_c}
+umbral_5pct <- qnorm(0.05, mean = mu_2, sd = sigma_2)
+```
+El nuevo umbral para limitar el alto riesgo al 5% es **`r round(umbral_5pct, 2)`**.
+
+---
+
+## Ejercicio 3: Control de calidad en predicciones
+
+**Contexto:** Los errores de predicción siguen una distribución $N(0, 200)$.
+
+### (a) Probabilidad de error inaceptable ($|e| > 400$)
+Calculamos $P(X < -400) + P(X > 400)$.
+
+```{r ej3_a}
+mu_3 <- 0
+sigma_3 <- 200
+prob_inaceptable <- 2 * pnorm(-400, mean = mu_3, sd = sigma_3)
+```
+La probabilidad de un error inaceptable es **`r round(prob_inaceptable, 4)`**.
+
+### (b) Errores esperados en 30 días
+
+```{r ej3_b}
+errores_esperados <- 30 * prob_inaceptable
+```
+Se esperan aproximadamente **`r round(errores_esperados, 2)`** errores inaceptables al mes.
+
+### (c) Mejora con reducción de varianza
+Si $\sigma$ se reduce a 120:
+
+```{r ej3_c}
+sigma_3_nueva <- 120
+prob_inaceptable_nueva <- 2 * pnorm(-400, mean = mu_3, sd = sigma_3_nueva)
+plot_gaussian(mu_3, sigma_3_nueva, lower = 400, title = "Error con Sigma = 120")
+```
+La nueva probabilidad de error es **`r round(prob_inaceptable_nueva, 6)`**, una reducción significativa.
+
+---
+
+## Ejercicio 4: Muestreo de Usuarios
+
+**Contexto:** Edad de usuarios en una plataforma $N(34, 9)$.
+
+### (a) Rango de edad (25 a 43 años)
+
+```{r ej4_a}
+mu_4 <- 34
+sigma_4 <- 9
+prob_25_43 <- pnorm(43, mean = mu_4, sd = sigma_4) - pnorm(25, mean = mu_4, sd = sigma_4)
+plot_gaussian(mu_4, sigma_4, lower = 25, upper = 43, title = "Proporción de usuarios entre 25 y 43 años")
+```
+El **`r round(prob_25_43 * 100, 2)`%** de los usuarios se encuentra en este rango.
+
+### (b) Percentil 90 (10% más mayor)
+
+```{r ej4_c}
+edad_10pct_superior <- qnorm(0.90, mean = mu_4, sd = sigma_4)
+```
+El 10% de los usuarios de mayor edad supera los **`r round(edad_10pct_superior, 1)`** años.
+
+---
+
+## Ejercicio 5: Tiempos de respuesta (SLA)
+
+**Contexto:** Tiempo de respuesta $N(120, 25)$ ms.
+
+### (a) Probabilidad de evento raro ($X > 170$ ms)
+
+```{r ej5_a}
+mu_5 <- 120
+sigma_5 <- 25
+prob_170 <- pnorm(170, mean = mu_5, sd = sigma_5, lower.tail = FALSE)
+```
+La probabilidad es **`r round(prob_170, 4)`** (~2.2%). Se considera un evento poco frecuente.
+
+### (b) Definición de SLA (99%)
+
+```{r ej5_b}
+T_99 <- qnorm(0.99, mean = mu_5, sd = sigma_5)
+```
+Para cubrir el 99% de las peticiones, el SLA debe ser de **`r round(T_99, 2)` ms**.
+
+### (c) Impacto de duplicar la varianza en tráfico pico
+
+```{r ej5_c}
+nueva_sigma <- sqrt(2 * (sigma_5^2))
+T_99_pico <- qnorm(0.99, mean = mu_5, sd = nueva_sigma)
+plot_gaussian(mu_5, nueva_sigma, upper = T_99_pico, title = "SLA al 99% con Varianza Duplicada")
+```
+En hora pico, el valor T necesario sube a **`r round(T_99_pico, 2)` ms**.
+
+---

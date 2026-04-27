@@ -6,6 +6,6 @@
   "date": "2026-04-21",
   "tags": ["analisis", "etl", "shiny"],
   "thumbnail": "figuras/vaca.jpg",
-  "status": "en progreso",
+  "status": "completado",
   "report": "analisis_vacas.html"
 }
