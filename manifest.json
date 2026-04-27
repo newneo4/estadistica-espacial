@@ -3,6 +3,7 @@
   "id": "tarea-01",
   "folder": "tarea-01-introduccion",
   "title": "Introducción a la Estadística Espacial",
+  "unidad": "UNIDAD 1", 
   "description": "Exploración de conceptos fundamentales de datos espaciales: tipos de datos geográficos, sistemas de coordenadas, y primeras visualizaciones con paquetes de R como sf y ggplot2.",
   "date": "2026-04-20",
   "tags": ["introducción", "sf", "visualización"],
@@ -14,7 +15,8 @@
   "id": "tarea-02",
   "folder": "tarea-02-analisis-espacial",
   "title": "Analisis Estadistico Espacial",
-  "description": "Tratamiento y analisis de data proviniente del ENA 2024.",
+  "unidad": "UNIDAD 1", 
+  "description": "Tratamiento y analisis de data proveniente del ENA 2024.",
   "date": "2026-04-20",
   "tags": ["introducción", "sf", "analisis", "etl"],
   "thumbnail": "figuras/image.png",
@@ -25,23 +27,26 @@
   "id": "tarea-03",
   "folder": "tarea-03-analisis-vacas",
   "title": "Dashboard de analisis de vacas",
+  "unidad": "UNIDAD 1", 
   "description": "Tratamiento y analisis de hatos de vacas",
   "date": "2026-04-21",
   "tags": ["analisis", "etl", "shiny"],
   "thumbnail": "figuras/vaca.jpg",
-  "status": "completado",
+  "status": "completada",
   "report": "analisis_vacas.html"
 }
 ,{
   "id": "tarea-04",
   "folder": "tarea-04-ejercicios-gauss",
   "title": "Ejercicios de Variable Aleatoria Gaussiana",
+  "unidad": "UNIDAD 1", 
   "description": "Ejercicios propuestos",
   "date": "2026-04-27",
   "tags": ["gauss","estadistica espacial"],
   "thumbnail": "figuras/gauss.jpg",
-  "status": "completado",
-  "report": "gauss.html"
+  "status": "completada",
+  "report": "gauss.html",
+  "pdf": "EJERCICIOS_DE_GAUSS.pdf"
 }
 
 ]

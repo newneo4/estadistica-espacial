@@ -87,17 +87,27 @@
       </div>
 
       <!-- Filters + Search -->
-      <div class="filters-bar" id="filters-bar">
-        <div class="filters" id="filters">
-          <button class="filter-btn active" data-filter="all">Todas</button>
-          <!-- Dynamic filter buttons injected by JS -->
+      <div class="filters-container">
+        <div class="filters-bar" id="unit-filters-bar">
+          <div class="filters" id="unit-filters">
+            <button class="filter-btn active" data-unit="all">Todas las Unidades</button>
+            <button class="filter-btn" data-unit="UNIDAD 1">UNIDAD 1</button>
+            <button class="filter-btn" data-unit="UNIDAD 2">UNIDAD 2</button>
+          </div>
+          
+          <div class="search-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input type="text" class="search-input" id="search-input" placeholder="Buscar tareas..." aria-label="Buscar tareas">
+          </div>
         </div>
 
-        <div class="search-wrapper">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-          </svg>
-          <input type="text" class="search-input" id="search-input" placeholder="Buscar tareas..." aria-label="Buscar tareas">
+        <div class="filters-bar" id="filters-bar">
+          <div class="filters" id="filters">
+            <button class="filter-btn active" data-filter="all">Todas las etiquetas</button>
+            <!-- Dynamic filter buttons injected by JS -->
+          </div>
         </div>
       </div>
 

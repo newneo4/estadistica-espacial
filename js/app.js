@@ -33,6 +33,7 @@
   -------------------------------------------------- */
   let allTasks = [];
   let activeFilter = 'all';
+  let activeUnitFilter = 'all';
   let searchQuery = '';
 
   /* --------------------------------------------------
@@ -254,7 +255,7 @@
       filtersDiv.appendChild(btn);
     });
 
-    // Delegate clicks
+    // Delegate clicks for tags
     filtersDiv.addEventListener('click', (e) => {
       const btn = e.target.closest('.filter-btn');
       if (!btn) return;
@@ -263,6 +264,19 @@
       activeFilter = btn.dataset.filter;
       renderCards();
     });
+
+    // Delegate clicks for units
+    const unitFiltersDiv = $('#unit-filters');
+    if (unitFiltersDiv) {
+      unitFiltersDiv.addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+        unitFiltersDiv.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeUnitFilter = btn.dataset.unit;
+        renderCards();
+      });
+    }
   }
 
   /* --------------------------------------------------
@@ -287,6 +301,9 @@
 
     // Filter
     let filtered = allTasks;
+    if (activeUnitFilter !== 'all') {
+      filtered = filtered.filter(t => t.unidad === activeUnitFilter);
+    }
     if (activeFilter !== 'all') {
       filtered = filtered.filter(t => (t.tags || []).includes(activeFilter));
     }
@@ -355,6 +372,15 @@
           day: 'numeric', month: 'short', year: 'numeric'
         })
       : '';
+      
+    const pdfButtonHTML = task.pdf 
+      ? `<a href="tareas/${task.folder}/${task.pdf}" target="_blank" rel="noopener" class="pdf-btn" title="Ver PDF" aria-label="Ver PDF de la tarea">
+           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline>
+           </svg>
+           PDF
+         </a>`
+      : '';
 
     card.innerHTML = `
       <a href="${reportUrl}" class="card-link" aria-label="Ver reporte: ${task.title}"></a>
@@ -375,7 +401,10 @@
             </svg>
             ${dateFormatted}
           </span>
-          <span class="status-badge ${statusClass}">${statusLabel}</span>
+          <div class="card-actions">
+            ${pdfButtonHTML}
+            <span class="status-badge ${statusClass}">${statusLabel}</span>
+          </div>
         </div>
       </div>
     `;

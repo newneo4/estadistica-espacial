@@ -391,12 +391,18 @@ img {
 
 /* Filters */
 /* Filters */
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-2xl);
+}
+
 .filters-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-md);
-  margin-bottom: var(--space-2xl);
 }
 
 /* Contenedor de botones */
@@ -639,6 +645,41 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.pdf-btn {
+  position: relative;
+  z-index: 10; /* Above card-link overlay */
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background: rgba(244, 114, 182, 0.1);
+  color: var(--accent-4);
+  border: 1px solid rgba(244, 114, 182, 0.2);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.pdf-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+.pdf-btn:hover {
+  background: var(--accent-4);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(244, 114, 182, 0.4);
 }
 
 .card-date {
