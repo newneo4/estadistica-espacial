@@ -1,0 +1,13 @@
+{
+  "id": "tarea-05",
+  "folder": "tarea-05-articulo",
+  "title": "Exposicion articulo",
+  "unidad": "UNIDAD 1", 
+  "description": "Este estudio presenta un método avanzado de agrupamiento difuso para analizar los flujos electorales en Italia entre los comicios generales de 2018 y 2022",
+  "date": "2026-05-18",
+  "tags": ["Agrupamiento difuso"],
+  "thumbnail": "figuras/portada.png",
+  "status": "completada",
+  "report": "video.html",
+  "pdf": "Italy_s_Voting_Topography.pdf"
+}

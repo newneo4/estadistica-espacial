@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproductor de Video</title>
+    <style>
+        /* Estilos modernos y limpios */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .video-container {
+            width: 90%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: #333333;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* Truco de CSS para mantener la proporción 16:9 del video */
+        .responsive-iframe {
+            position: relative;
+            padding-bottom: 56.25%; /* Proporción 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            background-color: #000;
+        }
+
+        .responsive-iframe iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: #666666;
+            margin-top: 15px;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-container">
+        <!-- Puedes cambiar este título por el que prefieras -->
+        <h1>Geographical clustering of the electoral flow between the Italian general elections of 2018 and 2022</h1> 
+        
+        <div class="responsive-iframe">
+            <!-- El ID del video (4SgbEp3WS-o) ya está configurado aquí -->
+            <iframe 
+                src="https://www.youtube.com/embed/4SgbEp3WS-o?rel=0" 
+                title="Reproductor de YouTube" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <p class="footer-text">Este video es privado/no listado y solo está disponible a través de este sitio web.</p>
+    </div>
+
+</body>
+</html>
