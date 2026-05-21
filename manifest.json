@@ -48,5 +48,30 @@
   "report": "gauss.html",
   "pdf": "EJERCICIOS_DE_GAUSS.pdf"
 }
+,{
+  "id": "tarea-05",
+  "folder": "tarea-05-articulo",
+  "title": "Exposicion articulo",
+  "unidad": "UNIDAD 1", 
+  "description": "Este estudio presenta un método avanzado de agrupamiento difuso para analizar los flujos electorales en Italia entre los comicios generales de 2018 y 2022",
+  "date": "2026-05-18",
+  "tags": ["Agrupamiento difuso"],
+  "thumbnail": "figuras/portada.png",
+  "status": "completada",
+  "report": "video.html",
+  "pdf": "Italy_s_Voting_Topography.pdf"
+}
+,{
+  "id": "tarea-06",
+  "folder": "tarea-06-jenks",
+  "title": "Metodologia de Jenks",
+  "unidad": "UNIDAD 1", 
+  "description": "Comparacion de produccion entre pisos altitudinales (calculado mediante la metodologia de Jenks)",
+  "date": "2026-05-21",
+  "tags": ["ETL","jenks"],
+  "thumbnail": "figuras/pisos.jpg",
+  "status": "completada",
+  "report": "reporte_altitud.html"
+}
 
 ]
