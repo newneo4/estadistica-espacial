@@ -73,5 +73,70 @@
   "status": "completada",
   "report": "reporte_altitud.html"
 }
+,{
+  "id": "tarea-07",
+  "folder": "tarea-07-paper-1",
+  "title": "Envio Articulo Descriptivo",
+  "unidad": "UNIDAD 1", 
+  "description": "Primer articulo del tipo descriptivo enviado",
+  "date": "2026-06-08",
+  "tags": ["descriptivo","paper"],
+  "thumbnail": "figuras/paper.png",
+  "status": "completada",
+  "report": "reporte_altitud.html",
+  "pdf": "Paper_V1.pdf"
+}
+,{
+  "id": "tarea-08",
+  "folder": "tarea-08-autocorrelacion-moran",
+  "title": "Autocorrelación ( IMoran)",
+  "unidad": "UNIDAD 2", 
+  "description": "Resolucion ejercicios Autocorrelación",
+  "date": "2026-06-22",
+  "tags": ["moran","autocorrelación"],
+  "thumbnail": "figuras/moran.png",
+  "status": "completada",
+  "report": "script_moran.html",
+  "pdf": "procedimiento_moran.pdf"
+}
+,{
+  "id": "tarea-09",
+  "folder": "tarea-09-replicacion",
+  "title": "Replicación de Herramientas",
+  "unidad": "UNIDAD 2", 
+  "description": "Realizar el facsimíl del paper asignado a cada grupo",
+  "date": "2026-07-16",
+  "tags": ["replicacion","paper"],
+  "thumbnail": "figuras/herramientas.png",
+  "status": "completada",
+  "report": "index.html",
+  "pdf": "herramientas.pdf"
+}
+,{
+  "id": "tarea-10",
+  "folder": "tarea-10-indices",
+  "title": "Integración de Índices de Vegetación",
+  "unidad": "UNIDAD 2", 
+  "description": "Elaborar en formato de artículo de investigación la sintetización los resultados de aplicar técnicas de estadística espacial sobre índices de vegetación",
+  "date": "2026-07-23",
+  "tags": ["descriptivo","paper"],
+  "thumbnail": "figuras/indice.jpg",
+  "status": "completada",
+  "report": "index.html",
+  "pdf": "Integracion_indices.pdf"
+}
+,{
+  "id": "tarea-11",
+  "folder": "tarea-11-paper-2",
+  "title": "Envio articulo practico",
+  "unidad": "UNIDAD 2", 
+  "description": "Elaborar un articulo aplicando tecnicas de estadistica espacial",
+  "date": "2026-08-01",
+  "tags": ["aplicativo","paper"],
+  "thumbnail": "figuras/paper.png",
+  "status": "completada",
+  "report": "index.html",
+  "pdf": "altiplano_climate.pdf"
+}
 
 ]
