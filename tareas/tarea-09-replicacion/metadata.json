@@ -1,0 +1,13 @@
+{
+  "id": "tarea-09",
+  "folder": "tarea-09-replicacion",
+  "title": "Replicación de Herramientas",
+  "unidad": "UNIDAD 2", 
+  "description": "Realizar el facsimíl del paper asignado a cada grupo",
+  "date": "2026-07-16",
+  "tags": ["replicacion","paper"],
+  "thumbnail": "figuras/herramientas.png",
+  "status": "completada",
+  "report": "index.html",
+  "pdf": "herramientas.pdf"
+}

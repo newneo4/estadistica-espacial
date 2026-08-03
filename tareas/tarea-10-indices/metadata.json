@@ -1,0 +1,13 @@
+{
+  "id": "tarea-10",
+  "folder": "tarea-10-indices",
+  "title": "Integración de Índices de Vegetación",
+  "unidad": "UNIDAD 2", 
+  "description": "Elaborar en formato de artículo de investigación la sintetización los resultados de aplicar técnicas de estadística espacial sobre índices de vegetación",
+  "date": "2026-07-23",
+  "tags": ["descriptivo","paper"],
+  "thumbnail": "figuras/indice.jpg",
+  "status": "completada",
+  "report": "index.html",
+  "pdf": "Integracion_indices.pdf"
+}

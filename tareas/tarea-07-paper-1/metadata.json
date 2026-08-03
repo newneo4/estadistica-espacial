@@ -1,0 +1,13 @@
+{
+  "id": "tarea-07",
+  "folder": "tarea-07-paper-1",
+  "title": "Envio Articulo Descriptivo",
+  "unidad": "UNIDAD 1", 
+  "description": "Primer articulo del tipo descriptivo enviado",
+  "date": "2026-06-08",
+  "tags": ["descriptivo","paper"],
+  "thumbnail": "figuras/paper.png",
+  "status": "completada",
+  "report": "reporte_altitud.html",
+  "pdf": "Paper_V1.pdf"
+}

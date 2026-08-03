@@ -1,0 +1,262 @@
+---
+title: "Práctica: Índice de Moran"
+author: "Nombre del estudiante"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE
+)
+
+library(spdep)
+```
+
+# Introducción
+
+En este informe se reproduce el cálculo del **Índice de Moran** utilizando el paquete **spdep** de R. Se desarrolla el ejemplo de cinco parcelas y posteriormente los ejercicios propuestos sobre una grilla de 3×3.
+
+# Parte B. Reproducción de la Parte A
+
+## Datos
+
+```{r}
+# Rendimiento (t/ha) de cinco parcelas
+z <- c(1.6, 1.8, 2.0, 1.5, 1.3)
+
+z
+```
+
+## Matriz de pesos espaciales
+
+```{r}
+# Matriz de contigüidad lineal
+W_matrix <- matrix(0, 5, 5)
+
+for(i in 1:4){
+  W_matrix[i, i+1] <- 1
+  W_matrix[i+1, i] <- 1
+}
+
+W_matrix
+```
+
+## Lista de pesos
+
+```{r}
+lw <- mat2listw(W_matrix, style = "B")
+```
+
+## Índice de Moran
+
+```{r}
+moran_index <- moran(
+  z,
+  lw,
+  n = length(z),
+  S0 = Szero(lw)
+)
+
+moran_index
+```
+
+Valor del índice:
+
+```{r}
+moran_index$I
+```
+
+El valor esperado es aproximadamente **0.207**, coincidiendo con el cálculo manual.
+
+## Prueba analítica
+
+```{r}
+m_test_A <- moran.test(
+  z,
+  lw,
+  randomisation = FALSE
+)
+
+m_test_A
+```
+
+## Prueba Monte Carlo
+
+Como solamente existen cinco observaciones, no es posible realizar 999 simulaciones. Se utilizan 99 permutaciones.
+
+```{r}
+set.seed(999)
+
+m_mc_A <- moran.mc(
+  z,
+  lw,
+  nsim = 99
+)
+
+m_mc_A
+```
+
+# Parte C. Ejercicios Propuestos
+
+## Datos
+
+```{r}
+z_grilla <- c(
+  2.1, 2.0, 1.6,
+  1.9, 1.8, 1.5,
+  1.7, 1.4, 1.3
+)
+
+coords <- expand.grid(
+  x = 1:3,
+  y = 3:1
+)
+
+coords
+```
+
+# Ejercicio 1. Contigüidad tipo Torre (Rook)
+
+## Vecindad
+
+```{r}
+nb_rook <- dnearneigh(
+  as.matrix(coords),
+  d1 = 0,
+  d2 = 1
+)
+
+lw_rook <- nb2listw(
+  nb_rook,
+  style = "B"
+)
+```
+
+## Índice de Moran
+
+```{r}
+moran_rook <- moran(
+  z_grilla,
+  lw_rook,
+  n = length(z_grilla),
+  S0 = Szero(lw_rook)
+)
+
+moran_rook
+```
+
+Valor del índice:
+
+```{r}
+moran_rook$I
+```
+
+El documento reporta un valor cercano a **0.4875**.
+
+## Contraste de significancia
+
+```{r}
+test_rook <- moran.test(
+  z_grilla,
+  lw_rook,
+  randomisation = FALSE
+)
+
+test_rook
+```
+
+# Ejercicio 2. Contigüidad tipo Queen
+
+## Vecindad
+
+```{r}
+nb_queen <- dnearneigh(
+  as.matrix(coords),
+  d1 = 0,
+  d2 = 1.5
+)
+
+lw_queen <- nb2listw(
+  nb_queen,
+  style = "B"
+)
+```
+
+## Índice de Moran
+
+```{r}
+moran_queen <- moran(
+  z_grilla,
+  lw_queen,
+  n = length(z_grilla),
+  S0 = Szero(lw_queen)
+)
+
+moran_queen
+```
+
+Valor del índice:
+
+```{r}
+moran_queen$I
+```
+
+### Comentario
+
+Al incorporar las diagonales aumenta el número de vecinos por parcela, modificando la estructura espacial y el valor del Índice de Moran.
+
+# Ejercicio 3. Aleatorización
+
+## Permutación de los datos
+
+```{r}
+set.seed(123)
+
+z_aleatorio <- sample(z_grilla)
+
+z_aleatorio
+```
+
+## Índice de Moran
+
+```{r}
+moran_aleatorio <- moran(
+  z_aleatorio,
+  lw_rook,
+  n = length(z_aleatorio),
+  S0 = Szero(lw_rook)
+)
+
+moran_aleatorio
+```
+
+Valor del índice:
+
+```{r}
+moran_aleatorio$I
+```
+
+## Valor esperado bajo H0
+
+```{r}
+-1/(length(z_grilla)-1)
+```
+
+### Comentario
+
+Después de aleatorizar los valores, el Índice de Moran tiende a aproximarse al valor esperado bajo la hipótesis nula de ausencia de autocorrelación espacial.
+
+# Conclusiones
+
+- Se reprodujo correctamente el cálculo del Índice de Moran para cinco parcelas.
+- Se obtuvo el mismo valor reportado en el cálculo manual.
+- Se evaluó la significancia mediante la prueba analítica y mediante simulaciones Monte Carlo.
+- Se comparó el efecto de utilizar vecindad tipo **Rook** y **Queen**.
+- Finalmente se verificó el comportamiento del índice al aleatorizar los datos, observándose una disminución de la autocorrelación espacial.

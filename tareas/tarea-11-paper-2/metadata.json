@@ -1,0 +1,13 @@
+{
+  "id": "tarea-11",
+  "folder": "tarea-11-paper-2",
+  "title": "Envio articulo practico",
+  "unidad": "UNIDAD 2", 
+  "description": "Elaborar un articulo aplicando tecnicas de estadistica espacial",
+  "date": "2026-08-01",
+  "tags": ["aplicativo","paper"],
+  "thumbnail": "figuras/paper.png",
+  "status": "completada",
+  "report": "index.html",
+  "pdf": "altiplano_climate.pdf"
+}

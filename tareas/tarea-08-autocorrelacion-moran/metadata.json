@@ -1,0 +1,13 @@
+{
+  "id": "tarea-08",
+  "folder": "tarea-08-autocorrelacion-moran",
+  "title": "Autocorrelación ( IMoran)",
+  "unidad": "UNIDAD 2", 
+  "description": "Resolucion ejercicios Autocorrelación",
+  "date": "2026-06-22",
+  "tags": ["moran","autocorrelación"],
+  "thumbnail": "figuras/moran.png",
+  "status": "completada",
+  "report": "script_moran.html",
+  "pdf": "procedimiento_moran.pdf"
+}
