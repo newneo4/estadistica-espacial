@@ -83,7 +83,7 @@
   "tags": ["descriptivo","paper"],
   "thumbnail": "figuras/paper.png",
   "status": "completada",
-  "report": "reporte_altitud.html",
+  "report": "index.html",
   "pdf": "Paper_V1.pdf"
 }
 ,{
